@@ -8,10 +8,10 @@ image='bam_logo.jpg'
 display='oops.jpg'
 import pygame, sys
 from pygame.locals import *
-
+#initializing the pygame
 pygame.init()
 screen = pygame.display.set_mode((600,300),0,32)
-
+#loading background images
 background = pygame.image.load(bif).convert()
 mouse_c = pygame.image.load(mif).convert_alpha()
 aim=pygame.image.load(im).convert_alpha()
@@ -23,7 +23,7 @@ c=0
 movex, movey = 0, 0
 clock = pygame.time.Clock()
 speed = 180
-
+#the game loop
 while True:
     
     for event in pygame.event.get():
