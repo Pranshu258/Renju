@@ -22,7 +22,7 @@ class renju(wx.Frame):
             print "Image file %s not found" % imageFile
             raise SystemExit
  
-
+        
         
         #the new game button
         pic = wx.Image("newgame.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
@@ -50,13 +50,16 @@ class renju(wx.Frame):
         
         
         bif = "grid.jpg"
-        bsif = "blackstone.png"
-        wsif = "whitestone.png"
+        bsif = "noir.png"
+        wsif = "blanc.png"
+        i_icon = "icon.png"
         #importing the libraries
         import pygame, sys
         from pygame.locals import *
 
         pygame.init()
+        icon = pygame.image.load(i_icon)
+        pygame.display.set_icon(icon)
         #setting the screen to 640 x 640 resolution
         screen = pygame.display.set_mode((640,640),0,32)
         #loading the background and stone images
@@ -66,11 +69,15 @@ class renju(wx.Frame):
         pygame.display.set_caption('The RENJU window')
         blacks = []
         whites = []
-       
-        count = 0        
+        #loading the initial screen
+        count = 1
+        blacks.append((300,300))
+        screen.blit(background,(20,20))
+        screen.blit(black,(300,300))
+        pygame.display.update()
         #the game loop
         while True:
-    
+            pos = [0,0]
             for event in pygame.event.get():
                 #to quit when the user clicks the close button
                 if event.type == QUIT:
@@ -78,15 +85,42 @@ class renju(wx.Frame):
                     #sys.exit()
                 #we can detect the position where the player clicks and wether it's the black's turn or white's turn
                 if event.type == MOUSEBUTTONDOWN:                   
+                    pos  = list(event.pos)
+                    print pos
+                     
                     
-                    print event.pos
                     count = count+1
+                    #finding the position at which the stones are to be placed
+                    x = 20
+                    while x<620:
+                        if pos[0]>=x and pos[0]<x+40:
+                           pos[0] = x
+                           break
+                        x = x+40
+                    y = 20
+                    while y<620:
+                        if pos[1]>=y and pos[1]<y+40:
+                           pos[1] = y
+                           break
+                        y = y+40
+                    #putting black or white stone according to the turns
                     if count%2 == 1:
-                         blacks.append((event.pos[0],event.pos[1]))
-                         print 'appended to black'
+                         blacks.append((pos[0],pos[1]))
+                         
+                         print 'appended to black ('+ str(pos[0]) + ', '+str(pos[1]) +')'
                     elif count%2 == 0:
-                         whites.append((event.pos[0],event.pos[1]))
-                         print 'appended to white'
+                         whites.append((pos[0],pos[1]))
+                         
+                         print 'appended to white ('+ str(pos[0]) + ', '+str(pos[1]) +')'
+                    i = 1
+                    while i <= count:
+                        if i%2 == 0:
+                            screen.blit(white,whites[i/2 -1])
+                            pygame.display.update()
+                        else:
+                            screen.blit(black,blacks[(i-1)/2 ])
+                            pygame.display.update()
+                        i = i+1
                     print count
 
                    
@@ -101,12 +135,13 @@ class renju(wx.Frame):
                 #pygame.quit()
                 #sys.exit()
             screen.blit(background,(20,20))
-            screen.blit(black,(120,40))
-            screen.blit(white,(120,120))
-            pygame.display.update()
+            #screen.blit(black,(pos[0],pos[1]))
+            #screen.blit(white,(120,120))
+            #pygame.display.update()
             
     def about(self, event):
-        box = wx.MessageDialog(None, "RENJU", 'About Renju',wx.YES_NO)
+        box = wx.MessageDialog(None, "RENJU is played on the 225 intersections of 15 horizontal and 15 vertical lines. Two players, Black and White, move in turn by placing a stone of their own color on an empty intersection, henceforth called a square. Black starts the game. The player who first makes a line of five consecutive stones of his color (horizontally, vertically or diagonally) wins the game. The stones once placed on the board during the game never move again nor can they be captured. If the board is completely filled, and no one has five-in-a-row, the game is drawn.", 'About Renju'
+,wx.YES_NO)
         ans = box.ShowModal()
         box.Destroy
         
@@ -118,10 +153,12 @@ class renju(wx.Frame):
             self.Close(True)
     def closewindow(self, event):
         self.Destroy()
+        
     def newplayer(self, event):
         textbox = wx.TextEntryDialog(None,"Name", ':) New Player', 'Enter your name here')
         if textbox.ShowModal() == wx.ID_OK:
             Name = textbox.GetValue()
+            
 
 if __name__ == '__main__':
     app = wx.App(False)
