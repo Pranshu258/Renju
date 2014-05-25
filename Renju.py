@@ -29,20 +29,17 @@ class renju(wx.Frame):
         self.button = wx.BitmapButton(panel, -1, pic, pos = (1010, 0))
         self.Bind(wx.EVT_BUTTON, self.dome, self.button)
         self.button.SetDefault()
+        
         #the quit game button
         pic1 = wx.Image("quit.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
         self.button = wx.BitmapButton(panel, -1, pic1, pos = (1010, 650))
         self.Bind(wx.EVT_BUTTON, self.closebutton, self.button)
         self.Bind(wx.EVT_CLOSE, self.closewindow)
         self.button.SetDefault()
-        #the newplayer button
-        pic2 = wx.Image("newplayer.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
-        self.button = wx.BitmapButton(panel, -1, pic2, pos = (1010, 54))
-        self.Bind(wx.EVT_BUTTON, self.newplayer, self.button)
-        self.button.SetDefault()
+       
         #the about renju button
         pic3 = wx.Image("renju.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
-        self.button = wx.BitmapButton(panel, -1, pic3, pos = (1010, 108))
+        self.button = wx.BitmapButton(panel, -1, pic3, pos = (1010, 54))
         self.Bind(wx.EVT_BUTTON, self.about, self.button)
         self.button.SetDefault()
         
@@ -56,7 +53,11 @@ class renju(wx.Frame):
         #importing the libraries
         import pygame, sys
         from pygame.locals import *
-
+        #Registering the player
+        textbox = wx.TextEntryDialog(None,"Name", ':) New Player', 'Enter your name here')
+        if textbox.ShowModal() == wx.ID_OK:
+            Name = textbox.GetValue()
+            
         pygame.init()
         icon = pygame.image.load(i_icon)
         pygame.display.set_icon(icon)
@@ -66,12 +67,14 @@ class renju(wx.Frame):
         background = pygame.image.load(bif).convert()
         black = pygame.image.load(bsif).convert_alpha()
         white = pygame.image.load(wsif).convert_alpha()
-        pygame.display.set_caption('The RENJU window')
+        pygame.display.set_caption('Welcome ' + str(Name))
         blacks = []
         whites = []
         #loading the initial screen
         count = 1
+        print count
         blacks.append((300,300))
+        print 'appended to black (300,300)'
         screen.blit(background,(20,20))
         screen.blit(black,(300,300))
         pygame.display.update()
@@ -87,9 +90,8 @@ class renju(wx.Frame):
                 if event.type == MOUSEBUTTONDOWN:                   
                     pos  = list(event.pos)
                     print pos
-                     
+                    flag = 1
                     
-                    count = count+1
                     #finding the position at which the stones are to be placed
                     x = 20
                     while x<620:
@@ -103,26 +105,45 @@ class renju(wx.Frame):
                            pos[1] = y
                            break
                         y = y+40
+                        
+                    j = 0
+                    while j < len(whites):
+                        if pos[0] == whites[j][0] and pos[1] == whites[j][1]:
+                            flag = 0
+                            print flag
+                            break
+                        j = j+1
+                    j = 0
+                    while j < len(blacks):
+                        if pos[0] == blacks[j][0] and pos[1] == blacks[j][1]:
+                            flag = 0
+                            print flag
+                            break
+                        j = j+1
+                    if flag == 1:
+                        count = count+1
+                        print count
                     #putting black or white stone according to the turns
-                    if count%2 == 1:
-                         blacks.append((pos[0],pos[1]))
-                         
-                         print 'appended to black ('+ str(pos[0]) + ', '+str(pos[1]) +')'
-                    elif count%2 == 0:
-                         whites.append((pos[0],pos[1]))
-                         
-                         print 'appended to white ('+ str(pos[0]) + ', '+str(pos[1]) +')'
-                    i = 1
-                    while i <= count:
-                        if i%2 == 0:
-                            screen.blit(white,whites[i/2 -1])
-                            pygame.display.update()
-                        else:
-                            screen.blit(black,blacks[(i-1)/2 ])
-                            pygame.display.update()
-                        i = i+1
-                    print count
-
+                        if count%2 == 1:
+                        
+                            blacks.append((pos[0],pos[1]))
+                            print 'appended to black ('+ str(pos[0]) + ', '+str(pos[1]) +')'
+                        
+                        elif count%2 == 0:
+                    
+                            whites.append((pos[0],pos[1]))
+                            print 'appended to white ('+ str(pos[0]) + ', '+str(pos[1]) +')'
+                       
+                        i = 1
+                        while i <= count:
+                            if i%2 == 0:
+                                screen.blit(white,whites[i/2 -1])
+                                pygame.display.update()
+                            else:
+                                screen.blit(black,blacks[(i-1)/2 ])
+                                pygame.display.update()
+                            i = i+1
+                    
                    
                     
                #if five in a row:
@@ -141,7 +162,7 @@ class renju(wx.Frame):
             
     def about(self, event):
         box = wx.MessageDialog(None, "RENJU is played on the 225 intersections of 15 horizontal and 15 vertical lines. Two players, Black and White, move in turn by placing a stone of their own color on an empty intersection, henceforth called a square. Black starts the game. The player who first makes a line of five consecutive stones of his color (horizontally, vertically or diagonally) wins the game. The stones once placed on the board during the game never move again nor can they be captured. If the board is completely filled, and no one has five-in-a-row, the game is drawn.", 'About Renju'
-,wx.YES_NO)
+,wx.OK)
         ans = box.ShowModal()
         box.Destroy
         
@@ -154,11 +175,8 @@ class renju(wx.Frame):
     def closewindow(self, event):
         self.Destroy()
         
-    def newplayer(self, event):
-        textbox = wx.TextEntryDialog(None,"Name", ':) New Player', 'Enter your name here')
-        if textbox.ShowModal() == wx.ID_OK:
-            Name = textbox.GetValue()
-            
+    
+        
 
 if __name__ == '__main__':
     app = wx.App(False)
