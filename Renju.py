@@ -57,7 +57,8 @@ class renju(wx.Frame):
         textbox = wx.TextEntryDialog(None,"Name", ':) New Player', 'Enter your name here')
         if textbox.ShowModal() == wx.ID_OK:
             Name = textbox.GetValue()
-            
+        else:
+            return
         pygame.init()
         icon = pygame.image.load(i_icon)
         pygame.display.set_icon(icon)
@@ -120,6 +121,8 @@ class renju(wx.Frame):
                             print flag
                             break
                         j = j+1
+                    if pos[0]>620 or pos[0]<20 or pos[1]>620 or pos[1]<20:
+                        flag=0
                     if flag == 1:
                         count = count+1
                         print count
@@ -133,7 +136,7 @@ class renju(wx.Frame):
                     
                             whites.append((pos[0],pos[1]))
                             print 'appended to white ('+ str(pos[0]) + ', '+str(pos[1]) +')'
-                       
+                            
                         i = 1
                         while i <= count:
                             if i%2 == 0:
@@ -142,18 +145,72 @@ class renju(wx.Frame):
                             else:
                                 screen.blit(black,blacks[(i-1)/2 ])
                                 pygame.display.update()
+
                             i = i+1
-                    
-                   
-                    
-               #if five in a row:
-               #if black:
-                #    print "Black player won.\n"
-                #if white:
-                #    print "White player won.\n"
-                #print 'GAME OVER  \n'
+                    else:
+                        wx.MessageBox('INVALID MOVE','ERROR 401',wx.OK)
+                stone = ""
+                turn = []
+                flag = 0
+                if count%2 == 1:
+                    stone = "Black"
+                    turn = blacks
+                elif count % 2 == 0:
+                    stone = "White"
+                    turn = whites
+                I = 0
+                while I < len(turn):
+                    a = (turn[I][0],turn[I][1])
+                    n = 1
+                    while n <= 5:
+                        if (a[0]+40*n, a[1])in turn:
+                            n = n+1
+                        else:
+                            break
+                    if n == 5:
+                        print stone + " wins the game\n"
+                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        flag = 1
+                        
+                        break
+                    n= 1
+                    while n <= 5:
+                        if (a[0]+40*n, a[1]+40*n)in turn:
+                            n = n+1
+                        else:
+                            break
+                    if n == 5:
+                        print stone + " wins the game\n"
+                        flag = 1
+                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        break
+                    n= 1
+                    while n <= 5:
+                        if (a[0]+40*n, a[1]-40*n)in turn:
+                            n = n+1
+                        else:
+                            break
+                    if n == 5:
+                        print stone + " wins the game\n"
+                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        flag = 1
+                        break
+                    n= 1
+                    while n <= 5:
+                        if (a[0], a[1]+40*n)in turn:
+                            n = n+1
+                        else:
+                            break
+                    if n == 5:
+                        print stone + " wins the game\n"
+                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        flag = 1
+                        break
+                    I = I+1
+
+                if flag == 1:
+                    pygame.quit()
                 
-                #pygame.quit()
                 #sys.exit()
             screen.blit(background,(20,20))
             #screen.blit(black,(pos[0],pos[1]))
