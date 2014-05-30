@@ -4,6 +4,7 @@ class renju(wx.Frame):
     def __init__(self, parent, id):
         wx.Frame.__init__(self,parent,id, 'RENJU', size = (1306,768))
         panel = wx.Panel(self)
+
         
         status = self.CreateStatusBar()
 
@@ -73,9 +74,7 @@ class renju(wx.Frame):
         whites = []
         #loading the initial screen
         count = 1
-        print count
         blacks.append((300,300))
-        print 'appended to black (300,300)'
         screen.blit(background,(20,20))
         screen.blit(black,(300,300))
         pygame.display.update()
@@ -90,7 +89,6 @@ class renju(wx.Frame):
                 #we can detect the position where the player clicks and wether it's the black's turn or white's turn
                 if event.type == MOUSEBUTTONDOWN:                   
                     pos  = list(event.pos)
-                    print pos
                     flag = 1
                     
                     #finding the position at which the stones are to be placed
@@ -106,7 +104,7 @@ class renju(wx.Frame):
                            pos[1] = y
                            break
                         y = y+40
-                        
+                    #checking if the move is valid    
                     j = 0
                     while j < len(whites):
                         if pos[0] == whites[j][0] and pos[1] == whites[j][1]:
@@ -130,12 +128,10 @@ class renju(wx.Frame):
                         if count%2 == 1:
                         
                             blacks.append((pos[0],pos[1]))
-                            print 'appended to black ('+ str(pos[0]) + ', '+str(pos[1]) +')'
                         
                         elif count%2 == 0:
                     
                             whites.append((pos[0],pos[1]))
-                            print 'appended to white ('+ str(pos[0]) + ', '+str(pos[1]) +')'
                             
                         i = 1
                         while i <= count:
@@ -147,6 +143,7 @@ class renju(wx.Frame):
                                 pygame.display.update()
 
                             i = i+1
+                    #if the move is invalid
                     else:
                         wx.MessageBox('INVALID MOVE','ERROR 401',wx.OK)
                 stone = ""
@@ -158,9 +155,11 @@ class renju(wx.Frame):
                 elif count % 2 == 0:
                     stone = "White"
                     turn = whites
+                #checking after each step if any of the player has done five in a line
                 I = 0
                 while I < len(turn):
                     a = (turn[I][0],turn[I][1])
+                    #searching for horizontal 4
                     n = 1
                     while n <= 5:
                         if (a[0]+40*n, a[1])in turn:
@@ -168,10 +167,8 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        print stone + " wins the game\n"
                         wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
                         flag = 1
-                        
                         break
                     n= 1
                     while n <= 5:
@@ -180,7 +177,6 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        print stone + " wins the game\n"
                         flag = 1
                         wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
                         break
@@ -191,7 +187,6 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        print stone + " wins the game\n"
                         wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
                         flag = 1
                         break
@@ -202,24 +197,23 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        print stone + " wins the game\n"
                         wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
                         flag = 1
                         break
                     I = I+1
-
+                #declaring the winner
                 if flag == 1:
                     pygame.quit()
-                
-                #sys.exit()
+              
             screen.blit(background,(20,20))
-            #screen.blit(black,(pos[0],pos[1]))
-            #screen.blit(white,(120,120))
-            #pygame.display.update()
             
     def about(self, event):
-        box = wx.MessageDialog(None, "RENJU is played on the 225 intersections of 15 horizontal and 15 vertical lines. Two players, Black and White, move in turn by placing a stone of their own color on an empty intersection, henceforth called a square. Black starts the game. The player who first makes a line of five consecutive stones of his color (horizontally, vertically or diagonally) wins the game. The stones once placed on the board during the game never move again nor can they be captured. If the board is completely filled, and no one has five-in-a-row, the game is drawn.", 'About Renju'
-,wx.OK)
+        string = ("RENJU is played on the 225 intersections of 15 horizontal and 15 vertical lines."
+                 +"Two players, Black and White, move in turn by placing a stone of their own color on an empty intersection, henceforth called a square."
+                 +"Black starts the game. The player who first makes a line of five consecutive stones of his color (horizontally, vertically or diagonally) wins the game."
+                 +"The stones once placed on the board during the game never move again nor can they be captured."
+                 +"If the board is completely filled, and no one has five-in-a-row, the game is drawn.")
+        box = wx.MessageDialog(None, string, 'About Renju',wx.OK)
         ans = box.ShowModal()
         box.Destroy
         
@@ -229,6 +223,7 @@ class renju(wx.Frame):
         box.Destroy
         if ans == 5103:
             self.Close(True)
+            
     def closewindow(self, event):
         self.Destroy()
         
