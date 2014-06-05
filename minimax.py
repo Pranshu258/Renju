@@ -66,7 +66,7 @@ def isGameOver():
         I = I+1
 
     
-def evaluate():
+def evaluate(player):
 #higher the return score better is the move for the CPU player
 #searching for fives
     I = 0
@@ -296,3 +296,30 @@ I = 0
             
         I = I+1
   
+def getMoves():
+    moves = []
+    used = player + otherplayer
+    for u in used:
+        if (u[0]+40,u[1]) not in used:
+            moves.append(u[0]+40,u[1])
+        if (u[0]+40,u[1]+40) not in used:
+            moves.append(u[0]+40,u[1]+40)
+        if (u[0]+40,u[1]-40) not in used:
+            moves.append(u[0]+40,u[1]-40)
+        if (u[0]-40,u[1]) not in used:
+            moves.append(u[0]-40,u[1])
+        if (u[0]-40,u[1]) not in used:
+            moves.append(u[0]-40,u[1])
+        if (u[0]-40,u[1]-40) not in used:
+            moves.append(u[0],u[1]-40)
+        if (u[0],u[1]-40) not in used:
+            moves.append(u[0],u[1]-40)
+        if (u[0],u[1]+40) not in used:
+            moves.append(u[0],u[1]+40)
+        if (u[0]-40,u[1]+40) not in used:
+            moves.append(u[0]-40,u[1]+40)
+        return moves
+
+def makeMove(move):
+    player.append(move)
+    
