@@ -70,6 +70,7 @@ class renju(wx.Frame):
         black = pygame.image.load(bsif).convert_alpha()
         white = pygame.image.load(wsif).convert_alpha()
         pygame.display.set_caption('Welcome ' + str(Name))
+        screen.fill((128,128,0))
         blacks = []
         whites = []
         #loading the initial screen
@@ -123,7 +124,6 @@ class renju(wx.Frame):
                         flag=0
                     if flag == 1:
                         count = count+1
-                        print count
                     #putting black or white stone according to the turns
                         if count%2 == 1:
                         
@@ -167,7 +167,7 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        b = (a[0]+40*5, a[1])
                         flag = 1
                         break
                     n= 1
@@ -178,7 +178,7 @@ class renju(wx.Frame):
                             break
                     if n == 5:
                         flag = 1
-                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        b = (a[0]+40*5, a[1]+40*5)
                         break
                     n= 1
                     while n <= 5:
@@ -187,7 +187,7 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        b = (a[0]+40*5, a[1]-40*5)
                         flag = 1
                         break
                     n= 1
@@ -197,12 +197,14 @@ class renju(wx.Frame):
                         else:
                             break
                     if n == 5:
-                        wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
+                        b = (a[0], a[1]+40*5)
                         flag = 1
                         break
                     I = I+1
                 #declaring the winner
                 if flag == 1:
+                    pygame.time.delay(1000)
+                    wx.MessageBox(stone + " wins the game\n",'GAME OVER',wx.OK)
                     pygame.quit()
               
             screen.blit(background,(20,20))
