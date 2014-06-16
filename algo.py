@@ -1,4 +1,8 @@
 def minmax(player, otherplayer, depth, maxdepth, A, B):
+    print 'PLAYER'
+    print player
+    print 'OTHERPLAYER'
+    print otherplayer
     if isgameover(player) or depth == maxdepth:
         e = evaluate(player, otherplayer)
         print 'e'
@@ -19,7 +23,7 @@ def minmax(player, otherplayer, depth, maxdepth, A, B):
             bestscore = score
             bestmove = move
             if bestscore >= B: 
-                return  bestmove            
+                return bestmove            
     return bestmove
     
 def isgameover(play):            
@@ -61,9 +65,12 @@ def isgameover(play):
             return True
         I = I+1
 
-def getmoves(player, otherplayer):
+def getmoves(play, otherplay):
     moves = []
-    used = player + otherplayer
+    used = []
+    used = play + otherplay
+    print 'used'
+    print used
     for u in used:
         if (u[0]+40,u[1]) not in used:
             if (u[0]+40,u[1]) not in moves:
@@ -89,7 +96,9 @@ def getmoves(player, otherplayer):
         if (u[0]-40,u[1]+40) not in used:
             if (u[0]-40,u[1]+40) not in moves:
                 moves.append((u[0]-40,u[1]+40))
-        return moves
+    print 'moves'
+    print moves
+    return moves
 
 def evaluate(play1, play2):
     #higher the return score better is the move for the CPU player
