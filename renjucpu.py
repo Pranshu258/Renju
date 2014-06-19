@@ -128,17 +128,27 @@ class renju(wx.Frame):
                         if flag == 1:
                             whites.append((pos[0],pos[1]))
                             print whites
+
+                            i = 0
+                            while i < len(whites):
+                                #print str(whites[i])+' white'
+                                screen.blit(white, whites[i] )
+                                pygame.display.update()
+                                i = i+1           
+                            i = 0
+                            while i < len(blacks):
+                                #print str(blacks[i]) + ' black'
+                                screen.blit(black, blacks[i] )
+                                pygame.display.update()
+                                i = i+1
                             count = count+1
                         #if the move is invalid
                         else:
                             wx.MessageBox('INVALID MOVE','ERROR 401',wx.OK)
                         
-
-                if count%2 == 0:                     
-                    move = algo.minmax(blacks, whites, 0, 6, -1000, 1000)
-                    blacks.append(move)
+                if count%2 == 0:
+                    algo.minmax(blacks, whites, 0, 2, -1000, 1000)
                     count = count +1
-                    
                 i = 0
                 while i < len(whites):
                     #print str(whites[i])+' white'
@@ -150,7 +160,9 @@ class renju(wx.Frame):
                     #print str(blacks[i]) + ' black'
                     screen.blit(black, blacks[i] )
                     pygame.display.update()
-                    i = i+1                        
+                    i = i+1
+                    
+                       
                         
                 stone = ""
                 turn = []
