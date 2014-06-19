@@ -1,12 +1,13 @@
 def minmax(player, otherplayer, depth, maxdepth, A, B):
+    a = []
+    b = []
     print 'PLAYER'
     print player
     print 'OTHERPLAYER'
     print otherplayer
     if isgameover(player) or depth == maxdepth:
         e = evaluate(player, otherplayer)
-        print 'e'
-        print e
+        print 'e '+str(e)
         return e
     bestmove = None
     bestscore = -1000
@@ -14,17 +15,23 @@ def minmax(player, otherplayer, depth, maxdepth, A, B):
     for m in move:
         print 'm'
         print m
-        player.append(m)
-        score = minmax(otherplayer, player, depth+1, maxdepth, -B, -max(A, bestscore))
-        print 'score'
-        print score
+        a = player+[(m)]
+        b = otherplayer+[]
+        score = minmax(b, a, depth+1, maxdepth, -B, -max(A, bestscore))            
+        print 'depth '+str(depth)
+        print 'score '+ str(score)
         score = -score
         if score > bestscore:
+            print 'beta'
             bestscore = score
             bestmove = move
-            if bestscore >= B: 
-                return bestmove            
-    return bestmove
+            if bestscore >= B:
+                print 'alpha'
+                return bestscore
+    print 'bestmove '+str(bestmove)
+    if depth == 0:
+        player.append((bestmove[0]))
+    return bestscore
     
 def isgameover(play):            
     I = 0
@@ -64,41 +71,55 @@ def isgameover(play):
         if n == 5:
             return True
         I = I+1
-
-def getmoves(play, otherplay):
+        
+def getmoves(play1, play2):
     moves = []
-    used = []
-    used = play + otherplay
-    print 'used'
-    print used
+    used = play1 + play2
+    p = []
+    s1 = 0
     for u in used:
+        if (u[0],u[1]-40) not in used:
+            if (u[0],u[1]-40) not in moves:
+                moves.append((u[0],u[1]-40))
+        if (u[0]+40,u[1]-40) not in used:
+            if (u[0]+40,u[1]-40) not in moves:
+                moves.append((u[0]+40,u[1]-40))
         if (u[0]+40,u[1]) not in used:
             if (u[0]+40,u[1]) not in moves:
                 moves.append((u[0]+40,u[1]))
         if (u[0]+40,u[1]+40) not in used:
             if (u[0]+40,u[1]+40) not in moves:
                 moves.append((u[0]+40,u[1]+40))
-        if (u[0]+40,u[1]-40) not in used:
-            if (u[0]+40,u[1]-40) not in moves:
-                moves.append((u[0]+40,u[1]-40))
-        if (u[0]-40,u[1]) not in used:
-            if (u[0]-40,u[1]) not in moves:
-                moves.append((u[0]-40,u[1]))
-        if (u[0]-40,u[1]-40) not in used:
-            if (u[0]-40,u[1]-40) not in moves:
-                moves.append((u[0]-40,u[1]-40))
-        if (u[0],u[1]-40) not in used:
-            if (u[0],u[1]-40) not in moves:
-                moves.append((u[0],u[1]-40))
         if (u[0],u[1]+40) not in used:
             if (u[0],u[1]+40) not in moves:
                 moves.append((u[0],u[1]+40))
         if (u[0]-40,u[1]+40) not in used:
             if (u[0]-40,u[1]+40) not in moves:
                 moves.append((u[0]-40,u[1]+40))
-    print 'moves'
-    print moves
-    return moves
+        if (u[0]-40,u[1]) not in used:
+            if (u[0]-40,u[1]) not in moves:
+                moves.append((u[0]-40,u[1]))
+        if (u[0]-40,u[1]-40) not in used:
+            if (u[0]-40,u[1]-40) not in moves:
+                moves.append((u[0]-40,u[1]-40))
+    print 'moves ' + str(moves)
+    s1 = 0
+    des = []
+    for m in moves:
+        p = []
+        p = play1+[m]
+        s2 = evaluate(p, play2)
+        if s2 > s1:
+            s1 = s2
+            des = []
+            des.append((m))
+        if s2 == s1:
+            des.append((m))
+        if s2 < s1:
+            continue
+    print 'des'+ str(des)
+    return des
+
 
 def evaluate(play1, play2):
     #higher the return score better is the move for the CPU player
@@ -450,6 +471,6 @@ def evaluate(play1, play2):
             return 2
         if (a[0]-40*4, a[1]) not in play2 and (a[0]-40*3, a[1]) not in play2 and (a[0]-40, a[1]) not in play2 and (a[0]-40*2, a[1]) not in play2:
             return 2
-
+    return 0
 
     
