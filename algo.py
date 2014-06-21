@@ -122,9 +122,7 @@ def getmoves(play1, play2):
 
 
 def evaluate(play1, play2):
-    #higher the return score better is the move for the CPU player
-    #searching for fives
-       
+    #SEARCHING FOR FIVES
     I = 0
     while I < len(play1):
         a = (play1[I][0],play1[I][1])
@@ -161,7 +159,68 @@ def evaluate(play1, play2):
         if n == 5:
             return 10
         I = I+1
-    #searching for fours 
+
+    #SEARCHING FOR MOVES THAT BLOCK OPPONENT'S FOURS WHICH HAVE UNBLOCKED ADJACENT NODES.IT WILL RETURN 9.
+    p = []
+    p = play1 + []
+    p.remove(p[len(p)-1])
+    m = play1[len(play1)-1]
+    I = 0
+    while I < len(play2):
+        a = (play2[I][0],play2[I][1])
+        #HORIZONTAL FOURS
+        n = 1
+        while n < 4:
+            if (a[0]+40*n, a[1])in play2:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]) not in p  and m == (a[0]+40*4, a[1]):
+                return 9
+            if (a[0]-40, a[1]) not in p and m == (a[0]-40, a[1]):
+                return 9
+        #SOUTHEAST FOURS
+        n= 1
+        while n < 4:
+            if (a[0]+40*n, a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]+40*4) not in p and m == (a[0]+40*4, a[1]+40*4):
+                return 9
+            if (a[0]-40, a[1]-40) not in p and m == (a[0]-40, a[1]-40):
+                return 9
+        #SOUTHWEST FOURS
+        n= 1
+        while n < 4:
+            if (a[0]+40*n, a[1]-40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]-40*4) not in p and m == (a[0]+40*4, a[1]-40*4):
+                return 9
+            if (a[0]-40, a[1]+40) not in p and m == (a[0]-40, a[1]+40):
+                return 9
+        #VERTICAL FOURS
+        n= 1
+        while n < 4:
+            if (a[0], a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0], a[1]+40*4) not in p and m == (a[0], a[1]+40*4):
+                return 9
+            if (a[0], a[1]-40) not in p and m == (a[0], a[1]-40):
+                return 9
+        I = I+1
+        
+    
+    
+    #SEARCHING FOR FOURS (BOTH SIDES UNBLOCKED) 
     I = 0
     while I < len(play1):
         a = (play1[I][0],play1[I][1])
@@ -173,7 +232,7 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 4:
-            if (a[0]+40*5, a[1]) not in play2 or (a[0]-40, a[1]) not in play2:
+            if (a[0]+40*4, a[1]) not in play2 and (a[0]-40, a[1]) not in play2:
                 return 8
         #SOUTHEAST FOURS
         n= 1
@@ -183,7 +242,7 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 4:
-            if (a[0]+40*5, a[1]+40*5) not in play2 or (a[0]-40, a[1]-40) not in play2:
+            if (a[0]+40*4, a[1]+40*4) not in play2 and (a[0]-40, a[1]-40) not in play2:
                 return 8
         #SOUTHWEST FOURS
         n= 1
@@ -193,7 +252,7 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 4:
-            if (a[0]+40*5, a[1]-40*5) not in play2 or (a[0]+40, a[1]-40) not in play2:
+            if (a[0]+40*4, a[1]-40*4) not in play2 and (a[0]-40, a[1]+40) not in play2:
                 return 8
         #VERTICAL FOURS
         n= 1
@@ -203,12 +262,244 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 4:
-            if (a[0], a[1]+40*5) not in play2 or (a[0], a[1]-40) not in play2:
+            if (a[0], a[1]+40*4) not in play2 and (a[0], a[1]-40) not in play2:
                 return 8
         I = I+1
+        
+    #SEARCHING FOR FOURS (ONE SIDE UNBLOCKED) 
+    I = 0
+    while I < len(play1):
+        a = (play1[I][0],play1[I][1])
+        #HORIZONTAL FOURS
+        n = 1
+        while n < 4:
+            if (a[0]+40*n, a[1])in play1:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]) not in play2 or (a[0]-40, a[1]) not in play2:
+                return 7
+        #SOUTHEAST FOURS
+        n= 1
+        while n < 4:
+            if (a[0]+40*n, a[1]+40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]+40*4) not in play2 or (a[0]-40, a[1]-40) not in play2:
+                return 7
+        #SOUTHWEST FOURS
+        n= 1
+        while n < 4:
+            if (a[0]+40*n, a[1]-40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0]+40*4, a[1]-40*4) not in play2 or (a[0]-40, a[1]+40) not in play2:
+                return 7
+        #VERTICAL FOURS
+        n= 1
+        while n < 4:
+            if (a[0], a[1]+40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 4:
+            if (a[0], a[1]+40*4) not in play2 or (a[0], a[1]-40) not in play2:
+                return 7
+        I = I+1
 
-    #searching for threes and broken fours
-    #return score 8 for broken fours (which can give winning move) and 7 for all threes 
+        #HORIZONTAL THREES AND ONE
+        n = 1
+        while n < 3:
+            if (a[0]+40*n, a[1])in play1:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]) not in play2 and (a[0]+40*4, a[1]) in play1:
+                return 7
+            if (a[0]-40, a[1]) not in play2 and (a[0]-40*2, a[1]) in play1:
+                return 7
+        #SOUTHEAST THREES AND ONE
+        n= 1
+        while n < 3:
+            if (a[0]+40*n, a[1]+40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]+40*3) not in play2 and (a[0]+40*4, a[1]+40*4) in play1:
+                return 7
+            if (a[0]-40, a[1]-40) not in play2 and (a[0]-40*2, a[1]-40*2) in play1:
+                return 7
+        #SOUTHWEST THREES AND ONE
+        n= 1
+        while n < 3:
+            if (a[0]+40*n, a[1]-40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]-40*3) not in play2 and (a[0]+40*4, a[1]-40*4) in play1:
+                return 7
+            if (a[0]-40, a[1]+40) not in play2 and (a[0]-40*2, a[1]+40*2) in play1:
+                return 7
+        #VERTICAL THREES AND ONE 
+        n= 1
+        while n < 3:
+            if (a[0], a[1]+40*n)in play1:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0], a[1]+40*3) not in play2 and (a[0], a[1]+40*3) in play1:
+                return 7
+            if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) in play1:
+                return 7
+        I = I+1
+
+    #SEARCHING FOR MOVES THAT BLOCK OPPONENT'S THREES WITH THREE ADJACENT EMPTY NODES. IT WILL RETURN 6
+    p = []
+    p = play1 + []
+    p.remove(p[len(p)-1])
+    m = play1[len(play1)-1]
+    I = 0
+    while I < len(play2):
+        a = (play2[I][0],play2[I][1])
+        #HORIZONTAL THREES
+        n = 1
+        while n < 3:
+            if (a[0]+40*n, a[1])in play2:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]) not in p and (a[0]-40, a[1]) not in p:
+                if (a[0]+40*4, a[1]) not in p:
+                    if m == (a[0]+40*3, a[1]) or m == (a[0]-40, a[1]) or m == (a[0]+40*4, a[1]):
+                        return 6
+                if (a[0]-80, a[1]) not in p:
+                    if m == (a[0]+40*3, a[1]) or m == (a[0]-40, a[1]) or m == (a[0]-80, a[1]):
+                        return 6                 
+        #SOUTHEAST THREES
+        n= 1
+        while n < 3:
+            if (a[0]+40*n, a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]+40*3) not in p and (a[0]-40, a[1]-40) not in p:
+                if (a[0]+40*4, a[1]+40*4) not in p:
+                    if m == (a[0]+40*3, a[1]+40*3) or m == (a[0]-40, a[1]-40) or m == (a[0]+40*4, a[1]+40*4):
+                        return 6
+                if (a[0]-40*2, a[1]-40*2) not in p:
+                    if m == (a[0]+40*3, a[1]+40*3) or m == (a[0]-40, a[1]-40) or m == (a[0]-40*2, a[1]-40*2):
+                        return 6
+                    
+        #SOUTHWEST THREES
+        n= 1
+        while n < 3:
+            if (a[0]+40*n, a[1]-40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0]+40*3, a[1]-40*3) not in p and (a[0]+40, a[1]-40) not in p:
+                if (a[0]+40*4, a[1]-40*4) not in p:
+                    if m == (a[0]+40*3, a[1]-40*3) or m == (a[0]+40, a[1]-40) or m == (a[0]+40*4, a[1]-40*4):
+                        return 6
+                if (a[0]+40*2, a[1]-40*2) not in p:
+                    if m == (a[0]+40*3, a[1]-40*3) or m == (a[0]+40, a[1]-40) or m == (a[0]+40*2, a[1]-40*2):
+                        return 6
+                    
+        #VERTICAL THREES
+        n= 1
+        while n < 3:
+            if (a[0], a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 3:
+            if (a[0], a[1]+40*3) not in p and (a[0], a[1]-40) not in p:
+                if (a[0], a[1]+40*4) not in p:
+                    if m == (a[0], a[1]+40*3) or m == (a[0], a[1]-40) or m ==  (a[0], a[1]+40*4):
+                        return 6
+                if (a[0], a[1]-40*2) not in p:
+                    if m == (a[0], a[1]+40*3) or m == (a[0], a[1]-40) or m ==  (a[0], a[1]-40*2):
+                        return 6
+        #BLOCKING OPPONENT'S BROKEN THREES
+        #HORIZONTAL TWOS AND ONE
+        n = 1
+        while n < 2:
+            if (a[0]+40*n, a[1])in play2:
+                n = n+1
+            else:
+                break
+        if n == 2:
+            if (a[0]+40*2, a[1]) not in p and (a[0]+40*3, a[1]) in play2:
+                if (a[0]+40*4, a[1]) not in p or  (a[0]-40, a[1]) not in p:
+                    if m == (a[0]+40*2, a[1]):
+                        return 6
+            if (a[0]-40, a[1]) not in p and (a[0]-40*2, a[1]) in play2:
+                if (a[0]-40*3, a[1]) not in p or (a[0]+40*2, a[1]) not in p:
+                    if m == (a[0]-40, a[1]):
+                        return 6
+        #SOUTHEAST TWOS AND ONE
+        n= 1
+        while n < 2:
+            if (a[0]+40*n, a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 2:
+            if (a[0]+40*2, a[1]+40*2) not in p and (a[0]+40*3, a[1]+40*3) in play2:
+                if (a[0]+40*4, a[1]+40*4) not in p or (a[0]-40, a[1]-40) not in p:
+                    if m == (a[0]+40*2, a[1]+40*2):
+                        return 6
+            if (a[0]-40, a[1]-40) not in p and (a[0]-40*2, a[1]-40*2) in play2:
+                if (a[0]-40*3, a[1]-40*3) not in p or (a[0]+40*2, a[1]+40*2) not in p:
+                    if m == (a[0]-40, a[1]-40):
+                        return 6
+        #SOUTHWEST TWOS AND ONE
+        n= 1
+        while n < 2:
+            if (a[0]+40*n, a[1]-40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 2:
+            if (a[0]+40*2, a[1]-40*2) not in p and (a[0]+40*3, a[1]-40*3) in play2:
+                if (a[0]+40*4, a[1]-40*4) not in p or (a[0]-40, a[1]+40) not in p:
+                    if m == (a[0]+40*2, a[1]-40*2):
+                        return 6
+            if (a[0]-40, a[1]+40) not in p and (a[0]-40*2, a[1]+40*2) in play2:
+                if (a[0]-40*3, a[1]+40*3) not in p or (a[0]+40*2, a[1]-40*2) not in p:
+                    if m == (a[0]-40, a[1]+40):
+                        return 6
+        #VERTICAL TWOS AND ONE
+        n= 1
+        while n < 2:
+            if (a[0], a[1]+40*n)in play2:
+                n = n+1
+            else:
+                break
+        if n == 2:
+            if (a[0], a[1]+40*2) not in p and (a[0], a[1]+40*3) in play2:
+                if (a[0], a[1]+40*4) not in p or (a[0], a[1]-40) not in p:
+                    if m == (a[0], a[1]+40*2):
+                        return 6
+            if (a[0], a[1]-40) not in p and (a[0], a[1]-40*2) in play2:
+                if (a[0], a[1]-40*3) not in p or (a[0], a[1]+40*2) not in p:
+                    if m == (a[0], a[1]-40):
+                        return 6
+        I = I+1
+        
+    #SEARCH FOR THREES (THREE UNBLOCKED ADJACENT NODES)&(TWO UBLOCKED ADJACENT NODES)
     I = 0
     while I < len(play1):
         a = (play1[I][0],play1[I][1])
@@ -220,16 +511,10 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 3:
-            if (a[0]+40*4, a[1]) not in play2 and (a[0]+40*5, a[1]) in play1:
-                return 8
-            if (a[0]-40, a[1]) not in play2 and (a[0]-40*2, a[1]) in play1:
-                return 8
-            if (a[0]+40*4, a[1]) not in play2 and (a[0]-40, a[1]) not in play2:
-                return 7
-            if (a[0]+40*4, a[1]) not in play2 and (a[0]+40*5, a[1]) not in play2:
-                return 7
-            if (a[0]-40, a[1]) not in play2 and (a[0]-40*2, a[1]) not in play2:
-                return 7
+            if (a[0]+40*3, a[1]) not in play2 and (a[0]-40, a[1]) not in play2:
+                if (a[0]+40*4, a[1]) not in play2 or (a[0]-80, a[1]) not in play2:
+                    return 5
+                return 4
         #SOUTHEAST THREES
         n= 1
         while n < 3:
@@ -238,16 +523,10 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 3:
-            if (a[0]+40*4, a[1]+40*4) not in play2 and (a[0]+40*5, a[1]+40*5) in play1:
-                return 8
-            if (a[0]-40, a[1]-40) not in play2 and (a[0]-40*2, a[1]-40*2) in play1:
-                return 8
-            if (a[0]+40*4, a[1]+40*4) not in play2 and (a[0]-40, a[1]-40) not in play2:
-                return 7
-            if (a[0]+40*4, a[1]+40*4) not in play2 and (a[0]+40*5, a[1]+40*5) not in play2:
-                return 7
-            if (a[0]-40, a[1]-40) not in play2 and (a[0]-40*2, a[1]-40*2) not in play2:
-                return 7
+            if (a[0]+40*3, a[1]+40*3) not in play2 and (a[0]-40, a[1]-40) not in play2:
+                if (a[0]+40*4, a[1]+40*4) not in play2 or (a[0]-40*2, a[1]-40*2) not in play2:
+                    return 5
+                return 4
         #SOUTHWEST THREES
         n= 1
         while n < 3:
@@ -256,16 +535,10 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 3:
-            if (a[0]+40*4, a[1]-40*4) not in play2 and (a[0]+40*5, a[1]-40*5) in play1:
-                return 8
-            if (a[0]-40, a[1]+40) not in play2 and (a[0]-40*2, a[1]+40*2) in play1:
-                return 8
-            if (a[0]+40*4, a[1]-40*4) not in play2 and (a[0]-40, a[1]+40) not in play2:
-                return 7
-            if (a[0]+40*4, a[1]-40*4) not in play2 and (a[0]+40*5, a[1]-40*5) not in play2:
-                return 7
-            if (a[0]-40, a[1]+40) not in play2 and (a[0]-40*2, a[1]+40*2) not in play2:
-                return 7
+            if (a[0]+40*3, a[1]-40*3) not in play2 and (a[0]+40, a[1]-40) not in play2:
+                if (a[0]+40*4, a[1]-40*4) not in play2 or (a[0]+40*2, a[1]-40*2) not in play2:
+                    return 5
+                return 4
         #VERTICAL THREES
         n= 1
         while n < 3:
@@ -274,19 +547,14 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 3:
-            if (a[0], a[1]+40*4) not in play2 and (a[0], a[1]+40*5) in play1:
-                return 8
-            if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) in play1:
-                return 8
-            if (a[0], a[1]+40*4) not in play2 and (a[0], a[1]-40) not in play2:
-                return 7
-            if (a[0], a[1]+40*4) not in play2 and (a[0], a[1]+40*5) not in play2:
-                return 7
-            if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) not in play2:
-                return 7
+            if (a[0], a[1]+40*3) not in play2 and (a[0], a[1]-40) not in play2:
+                if (a[0], a[1]+40*4) not in play2 or (a[0], a[1]-40*2) not in play2:
+                    return 5
+                return 4
         I = I+1
-
-    #search for broken threes (which are not blocked)
+        
+    
+    #SEARCH FOR BROKEN THREES AND TWOS
     I = 0
     while I < len(play1):
         a = (play1[I][0],play1[I][1])
@@ -298,12 +566,20 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 2:
-            if (a[0]+40*3, a[1]) not in play2 and (a[0]+40*4, a[1]) in play1:
-                if (a[0]+40*5, a[1]) not in play2 or  (a[0]-40, a[1]) not in play2:
-                    return 7
+            if (a[0]+40*2, a[1]) not in play2 and (a[0]+40*3, a[1]) in play1:
+                if (a[0]+40*4, a[1]) not in play2 or  (a[0]-40, a[1]) not in play2:
+                    return 4
             if (a[0]-40, a[1]) not in play2 and (a[0]-40*2, a[1]) in play1:
-                if (a[0]-40*3, a[1]) not in play2 or (a[0]+40*3, a[1]) not in play2:
-                    return 7
+                if (a[0]-40*3, a[1]) not in play2 or (a[0]+40*2, a[1]) not in play2:
+                    return 4
+            if (a[0]+40*2, a[1]) not in play2 and (a[0]+40*3, a[1]) not in play2 and (a[0]+40*4, a[1]) not in play2:
+                return 3
+            if (a[0]-40, a[1]) not in play2 and (a[0]+40*2, a[1]) not in play2 and (a[0]+40*3, a[1]) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]) not in play2 and (a[0]-40, a[1]) not in play2 and (a[0]+40*2, a[1]) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]) not in play2 and (a[0]-40, a[1]) not in play2 and (a[0]-40*3, a[1]) not in play2:
+                return 3
             
         #SOUTHEAST TWOS AND ONE
         n= 1
@@ -313,12 +589,20 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 2:
-            if (a[0]+40*3, a[1]+40*3) not in play2 and (a[0]+40*4, a[1]+40*4) in play1:
-                if (a[0]+40*5, a[1]+40*5) not in play2 or (a[0]-40, a[1]-40) not in play2:
-                    return 7
+            if (a[0]+40*2, a[1]+40*2) not in play2 and (a[0]+40*3, a[1]+40*3) in play1:
+                if (a[0]+40*4, a[1]+40*4) not in play2 or (a[0]-40, a[1]-40) not in play2:
+                    return 4
             if (a[0]-40, a[1]-40) not in play2 and (a[0]-40*2, a[1]-40*2) in play1:
-                if (a[0]-40*3, a[1]-40*3) not in play2 or (a[0]+40*3, a[1]+40*3) not in play2:
-                    return 7
+                if (a[0]-40*3, a[1]-40*3) not in play2 or (a[0]+40*2, a[1]+40*2) not in play2:
+                    return 4
+            if (a[0]+40*2, a[1]+40*2) not in play2 and (a[0]+40*3, a[1]+40*3) not in play2 and (a[0]+40*4, a[1]+40*4) not in play2:
+                return 3
+            if (a[0]-40, a[1]-40) not in play2 and (a[0]+40*2, a[1]+40*2) not in play2 and (a[0]+40*3, a[1]+40*3) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]-40*2) not in play2 and (a[0]-40, a[1]-40) not in play2 and (a[0]+40*2, a[1]+40*2) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]-40*2) not in play2 and (a[0]-40, a[1]-40) not in play2 and (a[0]-40*3, a[1]-40*3) not in play2:
+                return 3
             
         #SOUTHWEST TWOS AND ONE
         n= 1
@@ -328,14 +612,22 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 2:
-            if (a[0]+40*3, a[1]-40*3) not in play2 and (a[0]+40*4, a[1]-40*4) in play1:
-                if (a[0]+40*5, a[1]-40*5) not in play2 or (a[0]-40, a[1]+40) not in play2:
-                    return 7
+            if (a[0]+40*2, a[1]-40*2) not in play2 and (a[0]+40*3, a[1]-40*3) in play1:
+                if (a[0]+40*4, a[1]-40*4) not in play2 or (a[0]-40, a[1]+40) not in play2:
+                    return 4
             if (a[0]-40, a[1]+40) not in play2 and (a[0]-40*2, a[1]+40*2) in play1:
-                if (a[0]-40*3, a[1]+40*3) not in play2 or (a[0]+40*3, a[1]-40*3) not in play2:
-                    return 7
+                if (a[0]-40*3, a[1]+40*3) not in play2 or (a[0]+40*2, a[1]-40*2) not in play2:
+                    return 4
+            if (a[0]+40*2, a[1]-40*2) not in play2 and (a[0]+40*3, a[1]-40*3) not in play2 and (a[0]+40*4, a[1]-40*4) not in play2:
+                return 3
+            if (a[0]-40, a[1]+40) not in play2 and (a[0]+40*2, a[1]-40*2) not in play2 and (a[0]+40*3, a[1]-40*3) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]+40*2) not in play2 and (a[0]-40, a[1]+40) not in play2 and (a[0]+40*2, a[1]-40*2) not in play2:
+                return 3
+            if (a[0]-40*2, a[1]+40*2) not in play2 and (a[0]-40, a[1]+40) not in play2 and (a[0]-40*3, a[1]+40*3) not in play2:
+                return 3
            
-        #VERTICAL THREES
+        #VERTICAL TWOS AND ONE
         n= 1
         while n < 2:
             if (a[0], a[1]+40*n)in play1:
@@ -343,86 +635,25 @@ def evaluate(play1, play2):
             else:
                 break
         if n == 2:
-            if (a[0], a[1]+40*3) not in play2 and (a[0], a[1]+40*4) in play1:
-                if (a[0], a[1]+40*5) not in play2 or (a[0], a[1]-40) not in play2:
-                    return 7
+            if (a[0], a[1]+40*2) not in play2 and (a[0], a[1]+40*3) in play1:
+                if (a[0], a[1]+40*4) not in play2 or (a[0], a[1]-40) not in play2:
+                    return 4
             if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) in play1:
-                if (a[0], a[1]-40*3) not in play2 or (a[0], a[1]+40*3) not in play2:
-                    return 7
+                if (a[0], a[1]-40*3) not in play2 or (a[0], a[1]+40*2) not in play2:
+                    return 4
+            if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) not in play2 and (a[0], a[1]-40*3) not in play2:
+                return 3
+            if (a[0], a[1]+40*2) not in play2 and (a[0], a[1]+40*3) not in play2 and (a[0], a[1]+40*4) not in play2:
+                return 3
+            if (a[0], a[1]+40*2) not in play2 and (a[0], a[1]-40) not in play2 and (a[0], a[1]+40*3) not in play2:
+                return 3
+            if (a[0], a[1]-40*2) not in play2 and (a[0], a[1]-40) not in play2 and (a[0], a[1]+40*2) not in play2:
+                return 3
             
         I = I+1
         
-    #search for unblocked twos
-    I = 0
-    while I < len(play1):
-        a = (play1[I][0],play1[I][1])
-        #HORIZONTAL TWOS
-        n = 1
-        while n < 2:
-            if (a[0]+40*n, a[1])in play1:
-                n = n+1
-            else:
-                break
-        if n == 2:
-            if (a[0]+40*2, a[1]) not in play2 and (a[0]+40*3, a[1]) not in play2 and (a[0]+40*4, a[1]) not in play2:
-                return 4
-            if (a[0]-40, a[1]) not in play2 and (a[0]+40*2, a[1]) not in play2 and (a[0]+40*3, a[1]) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]) not in play2 and (a[0]-40, a[1]) not in play2 and (a[0]+40*2, a[1]) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]) not in play2 and (a[0]-40, a[1]) not in play2 and (a[0]-40*3, a[1]) not in play2:
-                return 4
-        #SOUTHEAST TWOS
-        n= 1
-        while n < 2:
-            if (a[0]+40*n, a[1]+40*n)in play1:
-                n = n+1
-            else:
-                break
-        if n == 2:
-            if (a[0]+40*2, a[1]+40*2) not in play2 and (a[0]+40*3, a[1]+40*3) not in play2 and (a[0]+40*4, a[1]+40*4) not in play2:
-                return 4
-            if (a[0]-40, a[1]-40) not in play2 and (a[0]+40*2, a[1]+40*2) not in play2 and (a[0]+40*3, a[1]+40*3) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]-40*2) not in play2 and (a[0]-40, a[1]-40) not in play2 and (a[0]+40*2, a[1]+40*2) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]-40*2) not in play2 and (a[0]-40, a[1]-40) not in play2 and (a[0]-40*3, a[1]-40*3) not in play2:
-                return 4
-        #SOUTHWEST TWOS
-        n= 1
-        while n < 2:
-            if (a[0]+40*n, a[1]-40*n)in play1:
-                n = n+1
-            else:
-                break
-        if n == 2:
-            if (a[0]+40*2, a[1]-40*2) not in play2 and (a[0]+40*3, a[1]-40*3) not in play2 and (a[0]+40*4, a[1]-40*4) not in play2:
-                return 4
-            if (a[0]-40, a[1]+40) not in play2 and (a[0]+40*2, a[1]-40*2) not in play2 and (a[0]+40*3, a[1]-40*3) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]+40*2) not in play2 and (a[0]-40, a[1]+40) not in play2 and (a[0]+40*2, a[1]-40*2) not in play2:
-                return 4
-            if (a[0]-40*2, a[1]+40*2) not in play2 and (a[0]-40, a[1]+40) not in play2 and (a[0]-40*3, a[1]+40*3) not in play2:
-                return 4
-        #VERTICAL TWOS
-        n= 1
-        while n < 2:
-            if (a[0], a[1]+40*n)in play1:
-                n = n+1
-            else:
-                break
-        if n == 2:
-            if (a[0], a[1]-40) not in play2 and (a[0], a[1]-40*2) not in play2 and (a[0], a[1]-40*3) not in play2:
-                return 4
-            if (a[0], a[1]+40*2) not in play2 and (a[0], a[1]+40*3) not in play2 and (a[0], a[1]+40*4) not in play2:
-                return 4
-            if (a[0], a[1]+40*2) not in play2 and (a[0], a[1]-40) not in play2 and (a[0], a[1]+40*3) not in play2:
-                return 4
-            if (a[0], a[1]-40*2) not in play2 and (a[0], a[1]-40) not in play2 and (a[0], a[1]+40*2) not in play2:
-                return 4
-        I = I+1
 
-    #SEARCHING FOR UNBLOCKED ONES:
+    #SEARCHING FOR UNBLOCKED ONES
     I = 0
     while I < len(play1):
         a = (play1[I][0],play1[I][1])
