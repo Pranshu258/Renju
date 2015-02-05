@@ -1,6 +1,7 @@
 RENJU build 2.3 RELEASE NOTES
 =====
 *Author: Pranshu Gupta*
+---------------------
 LIST OF CHANGES MADE IN BUILD 2.3
 1. Removed the dependency on wxPython. The application can now run 
    with only Pygame installed along with Python.
