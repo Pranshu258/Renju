@@ -1,8 +1,6 @@
 RENJU build 2.3 RELEASE NOTES
 =====
-/////////////////////////////////////////////////////////////////////
-Author: Pranshu Gupta
-/////////////////////////////////////////////////////////////////////
+*Author: Pranshu Gupta*
 LIST OF CHANGES MADE IN BUILD 2.3
 1. Removed the dependency on wxPython. The application can now run 
    with only Pygame installed along with Python.
@@ -21,4 +19,3 @@ LIST OF CHANGES MADE IN BUILD 2.3
 8. The code for placing the coin has been improved.
 9. Two player mode has been removed.
 10. Added notifications telling whose turn is it.
-/////////////////////////////////////////////////////////////////////
