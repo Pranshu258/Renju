@@ -2,6 +2,9 @@ RENJU build 2.3 RELEASE NOTES
 =====
 *Author: Pranshu Gupta*
 ---------------------
+
+![renju.png](renju.png)
+
 LIST OF CHANGES MADE IN BUILD 2.3
 
 1. Removed the dependency on wxPython. The application can now run 
